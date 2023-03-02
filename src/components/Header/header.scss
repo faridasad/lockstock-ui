@@ -1,0 +1,46 @@
+@import "../../styles/variables.scss";
+
+header {
+  background-color: #fff;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+
+  border-bottom: 1px solid rgba(204, 204, 204, 0.3);
+
+  .wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 1300px;
+    margin: 0 auto;
+  }
+
+  .logo {
+    width: 100px;
+    object-fit: cover;
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    a {
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+
+      &.primary {
+        background-color: $primary-color;
+        color: white;
+      }
+
+      &.secondary {
+        background-color: $secondary-color;
+        color: white;
+      }
+    }
+  }
+}
