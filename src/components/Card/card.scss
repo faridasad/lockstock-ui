@@ -1,40 +1,114 @@
 .card {
   position: relative;
   cursor: pointer;
-  
-  
+
+  overflow: hidden !important;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    visibility: hidden;
+    opacity: 0;
+    border-radius: 7px;
+
+    transition: 0.3s all ease-in-out;
+  }
+
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: .3s all ease-in-out;
+    transition: 0.3s all ease-in-out;
     border-radius: 7px;
   }
-  .top, .bottom {
+
+  .top,
+  .bottom {
     width: 100%;
     position: absolute;
     text-align: center;
     color: #fff;
     visibility: hidden;
     opacity: 0;
-    transition: .3s all ease-in-out;
+    transition: 0.3s all ease-in-out;
+    height: 0px;
+    z-index: 2;
   }
   .top {
     top: 0;
   }
   .bottom {
     bottom: 0;
-  }
-  &:hover {
+    background-color: #222;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: 1rem;
 
+    .left {
+      span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        aspect-ratio: 1/1;
+        border-radius: 50%;
+        background-color: salmon;
+        position: relative;
 
-    img {
-      filter: brightness(30%);
+        ::after {
+          content: "sa";
+          position: absolute;
+          top: -20px;
+          left: 0;
+          width: 100%;
+          height: 20px;
+          background-color: #222;
+          display: none;
+        }
+
+        &:hover::after{
+          display: block;
+        }
+      }
     }
 
-    .top, .bottom {
+    .right {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      span {
+        width: 30px;
+        aspect-ratio: 1/1;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+
+          filter: invert(99%) sepia(5%) saturate(2324%) hue-rotate(275deg)
+            brightness(119%) contrast(100%);
+        }
+      }
+    }
+  }
+  &:hover {
+    &::after {
       visibility: visible;
       opacity: 1;
+    }
+
+    .top,
+    .bottom {
+      visibility: visible;
+      opacity: 1;
+      height: 40px;
     }
   }
 }
