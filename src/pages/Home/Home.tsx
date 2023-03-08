@@ -31,7 +31,7 @@ const Home = () => {
               prompt={post.prompt}
               key={i}
               type={
-                i % 2 === 0
+                i % 3 === 0
                   ? "h-strecth"
                   : i % 3 === 0 && i % 2 === 0
                   ? "v-strecth"
