@@ -2,19 +2,23 @@ import "./card.scss";
 import shareIcon from "../../assets/images/share-outline.svg";
 import downloadIcon from "../../assets/images/download-outline.svg";
 import download from "../../utils/download";
+import copy from "../../utils/copy";
+import { useNavigate } from "react-router-dom";
 
 interface CardProps {
   image: string;
   name: string;
   prompt: string;
   type: string;
+  id: string;
 }
 
-const Card = ({ image, name, prompt, type }: CardProps) => {
+const Card = ({ image, name, prompt, type, id }: CardProps) => {
 
+  const navigate = useNavigate();
 
   return (
-    <div className={`card ${type}`} style={{["--user-name" as any]: name}}>
+    <div className={`card ${type}`} style={{ ["--user-name" as any]: name }} onClick={() => navigate(`/${id}`)}>
       <img src={image} />
       <div className="top">
         <p>{prompt}</p>
@@ -27,9 +31,15 @@ const Card = ({ image, name, prompt, type }: CardProps) => {
         </div>
         <div className="right">
           <span className="share">
-            <img src={shareIcon} />
+            <img
+              src={shareIcon}
+              onClick={() => copy(id).then(() => console.log("copied"))}
+            />
           </span>
-          <span className="download" onClick={() => download(image, `${prompt.slice(0, 15)}....png`)}>
+          <span
+            className="download"
+            onClick={() => download(image, `${prompt.slice(0, 15)}....png`)}
+          >
             <img src={downloadIcon} />
           </span>
         </div>
