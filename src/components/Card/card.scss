@@ -49,7 +49,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-inline: 1rem;
+    padding: 1.5rem;
 
     .left {
       span {
@@ -62,19 +62,25 @@
         background-color: salmon;
         position: relative;
 
-        ::after {
-          content: "sa";
+        &::after {
+          content: attr(data-name);
           position: absolute;
-          top: -20px;
+          top: -30px;
           left: 0;
-          width: 100%;
-          height: 20px;
+          font-size: 13px;
+          font-weight: 300;
+          min-height: 20px;
           background-color: #222;
           display: none;
+          white-space: nowrap;
+          padding: .1rem .5rem;
+          z-index: 3;
+          border-radius: 7px;
+        
         }
 
-        &:hover::after{
-          display: block;
+        &:hover::after {
+          display: flex;
         }
       }
     }
@@ -83,10 +89,13 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 1rem;
 
       span {
-        width: 30px;
+        width: 35px;
         aspect-ratio: 1/1;
+        border-radius: 50%;
+        padding: .4rem;
         img {
           width: 100%;
           height: 100%;
@@ -94,6 +103,12 @@
 
           filter: invert(99%) sepia(5%) saturate(2324%) hue-rotate(275deg)
             brightness(119%) contrast(100%);
+        }
+
+        transition: .2s background-color ease-in-out;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.2);
         }
       }
     }
