@@ -33,12 +33,18 @@ const Card = ({ image, name, prompt, type, id }: CardProps) => {
           <span className="share">
             <img
               src={shareIcon}
-              onClick={() => copy(id).then(() => console.log("copied"))}
+              onClick={(e) => {
+                e.stopPropagation();
+                copy(`${import.meta.env.VITE_CLIENT_BASE_URL}/${id}`).then(() => console.log("copied"))
+              }}
             />
           </span>
           <span
             className="download"
-            onClick={() => download(image, `${prompt.slice(0, 15)}....png`)}
+            onClick={(e) => {
+              e.stopPropagation();
+              download(image, `${prompt.slice(0, 15)}....png`)
+            }}
           >
             <img src={downloadIcon} />
           </span>
