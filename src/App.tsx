@@ -28,7 +28,8 @@ function App() {
       element: <Layout />,
       children: [
         { path: "/", element: <Home /> },
-        { path: "create", element: <Create /> },
+        { path: ":id", element: <Home /> },
+        { path: "/create", element: <Create /> },
       ],
     },
   ]);
