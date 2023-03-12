@@ -1,0 +1,39 @@
+@import '../../styles/variables.scss';
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 100;
+
+    .modal {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        border-radius: 10px;
+        padding: clamp(.5rem, 5vw, 2rem);
+        width: 90%;
+        max-width: 500px;
+
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: clamp(1rem, 5vw, 2rem);
+            height: clamp(1rem, 5vw, 2rem);
+            font-size: clamp(0.7rem, 3vw, 1.2rem);
+            border-radius: 50%;
+            cursor: pointer;
+            background-color: $secondary-color;
+            color: #fff;
+            display: grid;
+            place-items: center;
+        }
+    }
+}
