@@ -32,6 +32,10 @@ section.create {
           border-top-right-radius: 0;
         }
 
+        input[type="text"]:disabled{
+          background-color: rgba(204, 204, 204, 0.4);
+        }
+
         button {
           border-bottom-left-radius: 0;
           border-top-left-radius: 0;
@@ -95,6 +99,13 @@ section.create {
         &:focus {
           border: 1px solid $secondary-color;
         }
+      }
+
+      .status-text {
+        color: salmon;
+        font-size: 0.8rem;
+        font-weight: 300;
+        font-style: italic;
       }
     }
   }
