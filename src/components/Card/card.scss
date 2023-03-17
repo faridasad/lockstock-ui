@@ -21,7 +21,7 @@
     transition: 0.3s all ease-in-out;
   }
 
-  img {
+  img, canvas {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -66,8 +66,8 @@
         &::after {
           content: attr(data-name);
           position: absolute;
-          top: -30px;
-          left: 0;
+          top: -35px;
+          left: -10px;
           font-size: 13px;
           font-weight: 300;
           min-height: 20px;
@@ -97,6 +97,21 @@
         aspect-ratio: 1/1;
         border-radius: 50%;
         padding: .4rem;
+
+        &.copied {
+          position: relative;
+          &::after{
+            content: "Copied";
+            position: absolute;
+            top: -35px;
+            left: -10px;
+            background-color: #222;
+            padding: .1rem .5rem;
+            border-radius: 7px;
+            font-size: 13px;
+          }
+        }
+
         img {
           width: 100%;
           height: 100%;

@@ -4,6 +4,8 @@ import downloadIcon from "../../assets/images/download-outline.svg";
 import download from "../../utils/download";
 import copy from "../../utils/copy";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";4
+import BlurredImage from "../BlurredImage";
 
 interface CardProps {
   image: string;
@@ -11,15 +13,22 @@ interface CardProps {
   prompt: string;
   type: string;
   id: string;
+  hash: string;
 }
 
-const Card = ({ image, name, prompt, type, id }: CardProps) => {
 
+const Card = ({ image, name, prompt, type, id, hash }: CardProps) => {
+  const [isCopied, setIsCopied] = useState(false);
   const navigate = useNavigate();
 
+
   return (
-    <div className={`card ${type}`} style={{ ["--user-name" as any]: name }} onClick={() => navigate(`/${id}`)}>
-      <img src={image} />
+    <div
+      className={`card ${type}`}
+      style={{ ["--user-name" as any]: name }}
+      onClick={() => navigate(`/${id}`)}
+    >
+      <BlurredImage hash={hash} src={image} />
       <div className="top">
         <p>{prompt}</p>
       </div>
@@ -30,12 +39,20 @@ const Card = ({ image, name, prompt, type, id }: CardProps) => {
           </span>
         </div>
         <div className="right">
-          <span className="share">
+          <span className={isCopied ? "share copied" : "share"}>
             <img
+              alt="share"
               src={shareIcon}
               onClick={(e) => {
                 e.stopPropagation();
-                copy(`${import.meta.env.VITE_CLIENT_BASE_URL}/${id}`).then(() => console.log("copied"))
+                copy(`${import.meta.env.VITE_CLIENT_BASE_URL}/${id}`).then(
+                  () => {
+                    setIsCopied(true);
+                    setTimeout(() => {
+                      setIsCopied(false);
+                    }, 2000);
+                  }
+                );
               }}
             />
           </span>
@@ -43,10 +60,10 @@ const Card = ({ image, name, prompt, type, id }: CardProps) => {
             className="download"
             onClick={(e) => {
               e.stopPropagation();
-              download(image, `${prompt.slice(0, 15)}....png`)
+              download(image, `${prompt.slice(0, 15)}....png`);
             }}
           >
-            <img src={downloadIcon} />
+            <img src={downloadIcon} alt="download" />
           </span>
         </div>
       </div>
