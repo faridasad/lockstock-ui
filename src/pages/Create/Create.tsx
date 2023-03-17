@@ -1,24 +1,27 @@
 import axios from "axios";
+import "./create.scss";
 import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
-import "./create.scss";
+import encodeImageToBlurhash from "../../utils/blurhashEncode";
 
 const Create = () => {
   const [form, setForm] = useState({
     name: "",
     prompt: "",
     image: "",
+    isGenerated: false,
   });
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
-  const [statusText, setStatusText] = useState("")
+  const [statusText, setStatusText] = useState("");
   const navigate = useNavigate();
 
   const generateImage = async () => {
     if (!form.prompt || isGenerating) return;
 
     try {
+      setStatusText("");
       setIsGenerating(true);
       const res = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/dalle`,
@@ -35,10 +38,16 @@ const Create = () => {
       const data = res.data;
 
       if (data) {
-        setForm({ ...form, image: `data:image/jpeg;base64,${data.image}` });
+        setForm({
+          ...form,
+          image: `data:image/jpeg;base64,${data.image}`,
+          isGenerated: true,
+        });
       }
     } catch (error) {
-      alert(error);
+      setStatusText(
+        "Something went wrong with the server, please try again later"
+      );
     } finally {
       setIsGenerating(false);
     }
@@ -49,6 +58,11 @@ const Create = () => {
 
     if (!form.name || !form.prompt || !form.image) return;
 
+    if (!form.isGenerated) {
+      setStatusText("Please generate an image first");
+      return;
+    }
+
     try {
       setIsSharing(true);
       const res = await axios.post(
@@ -57,13 +71,14 @@ const Create = () => {
           name: form.name,
           prompt: form.prompt,
           image: form.image,
+          blurhash: await encodeImageToBlurhash(form.image),
         },
         {
           maxContentLength: Infinity,
           maxBodyLength: Infinity,
         }
       );
-      
+
       navigate("/");
     } catch (err) {
       console.log(err);
@@ -86,8 +101,13 @@ const Create = () => {
           <div className="image-form">
             <input
               onChange={(e) => {
-                setForm({ ...form, prompt: e.target.value });
+                setForm({
+                  ...form,
+                  prompt: e.target.value,
+                  isGenerated: false,
+                });
               }}
+              disabled={isGenerating}
               type="text"
               placeholder="Describe your image as you want to"
             />
@@ -110,6 +130,8 @@ const Create = () => {
               <Loader />
             )}
           </div>
+
+          {statusText && <p className="status-text">{statusText}</p>}
 
           <button type="submit" disabled={isSharing}>
             {isSharing ? "Sharing" : "Share"}
