@@ -4,27 +4,40 @@ import { useEffect, useRef, useState } from "react";
 import Card from "../../components/Card/Card";
 import { useLocation, useNavigate } from "react-router-dom";
 import Modal from "../../components/Modal/Modal";
+import { useInfiniteQuery, useQuery } from "react-query";
+import Loader from "../../components/Loader/Loader";
 
 interface PostProps {
   image: string;
   name: string;
   prompt: string;
+  blurhash: string;
   _id: string;
 }
 
 const Home = () => {
-  const [data, setData] = useState([]);
   const [singlePost, setSinglePost] = useState<any>({});
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const res = await axios.get(import.meta.env.VITE_SERVER_URL);
-      setData(res.data.data);
-    };
-    fetchPosts();
-  }, []);
+  const fetchPosts = async (page = 1, per_page = 10) => {
+    const res = await axios.get(
+      `${import.meta.env.VITE_SERVER_URL}?per_page=${per_page}&page=${page}`
+    );
+    return res.data;
+  };
 
+  const {
+    data,
+    status,
+    error,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  }: any = useInfiniteQuery({
+    queryKey: ["posts", "infinite"],
+    getNextPageParam: (prevData: any) => prevData.nextPage,
+    queryFn: ({ pageParam = 1 }) => fetchPosts(pageParam),
+  });
   const location = useLocation();
 
   useEffect(() => {
@@ -39,37 +52,82 @@ const Home = () => {
       fetchSinglePost();
       document.body.style.overflow = "hidden";
     }
+
+    return () => {
+      document.body.style.overflow = "auto"
+    }
   }, [location]);
 
-  function onClose() {
+
+  useEffect(() => {
+    console.log(hasNextPage);
+
+    let fetching = false;
+    const onScroll = (e: any) => {
+      const { scrollTop, clientHeight, scrollHeight } = e.target
+        .scrollingElement as Element;
+      if (!fetching && scrollTop + clientHeight >= scrollHeight * 0.9) {
+        fetching = true;
+        hasNextPage && fetchNextPage();
+        setTimeout(() => {
+          fetching = false;
+        }, 1000);
+      }
+    };
+
+    document.addEventListener("scroll", onScroll);
+
+    return () => document.removeEventListener("scroll", onScroll);
+  }, [hasNextPage]);
+
+  if (status === "loading")
+    return (
+      <div style={{ marginTop: "2rem", scale: "0.9" }}>
+        <Loader />
+      </div>
+    );
+  if (status === "error") return <p>Error: {error.message}</p>;
+
+  const onClose = () => {
     navigate("/");
     setSinglePost({});
     document.body.style.overflow = "auto";
-  }
+  };
 
   return (
     data && (
       <>
         <div className="home-grid">
-          {data.map((post: PostProps, i) => {
-            return (
+          {data.pages.map((page: any) => {
+            return page.data.map((post: PostProps, idx: number) => (
               <Card
+                hash={post.blurhash}
                 image={post.image}
                 name={post.name}
                 prompt={post.prompt}
-                key={i}
+                key={idx}
                 id={post._id}
                 type={
-                  i % 3 === 0
+                  idx % 3 === 0
                     ? "h-strecth"
-                    : i % 3 === 0 && i % 2 === 0
+                    : idx % 3 === 0 && idx % 2 === 0
                     ? "v-strecth"
                     : "big-strecth"
                 }
               />
-            );
+            ));
           })}
         </div>
+
+        {isFetchingNextPage && (
+          <div style={{ marginBlock: "1rem", scale: "0.8" }}>
+            <Loader />
+          </div>
+        )}
+
+        {/* <button disabled={!hasNextPage} onClick={() => fetchNextPage()}>
+          {hasNextPage ? "Load More" : "No More Posts"}
+        </button> */}
         <Modal isOpen={Object.keys(singlePost).length !== 0} onClose={onClose}>
           <div className="modal-content">
             <img src={singlePost.image} />
