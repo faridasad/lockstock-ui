@@ -1,6 +1,6 @@
 import axios from "axios";
 import "./create.scss";
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import encodeImageToBlurhash from "../../utils/blurhashEncode";
@@ -13,9 +13,15 @@ const Create = () => {
     isGenerated: false,
   });
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isMotionOpen, setIsMotionOpen] = useState(true);
   const [isSharing, setIsSharing] = useState(false);
   const [statusText, setStatusText] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    query.matches && setIsMotionOpen(false);
+  }, []);
 
   const generateImage = async () => {
     if (!form.prompt || isGenerating) return;
@@ -127,7 +133,10 @@ const Create = () => {
                 src={form.image || "https://via.placeholder.com/1024x1024"}
               />
             ) : (
-              <Loader />
+              isMotionOpen ? (
+                <Loader />
+              ) :
+              <span className="loader_no-animated">loading...</span>
             )}
           </div>
 

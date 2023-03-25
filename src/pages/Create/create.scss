@@ -32,7 +32,7 @@ section.create {
           border-top-right-radius: 0;
         }
 
-        input[type="text"]:disabled{
+        input[type="text"]:disabled {
           background-color: rgba(204, 204, 204, 0.4);
         }
 
@@ -109,4 +109,16 @@ section.create {
       }
     }
   }
+}
+
+.loader_no-animated {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 1.25rem;
+  font-weight: 200;
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
 }
