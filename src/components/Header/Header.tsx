@@ -8,8 +8,8 @@ function Header() {
       <div className="wrapper">
         <Link to="/" className="link"><img src={Logo} className="logo"/></Link>
         <nav>
-          <Link to="/create" className="link primary">+ Create</Link>
-          <Link to="https://www.buymeacoffee.com/faredasad" target="_blank" className="link secondary">Support</Link>
+          <Link to="/create" className="link primary"></Link>
+          <Link to="https://www.buymeacoffee.com/faredasad" target="_blank" className="link secondary"></Link>
         </nav>
       </div>
     </header>

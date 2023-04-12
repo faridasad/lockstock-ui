@@ -36,11 +36,38 @@ header {
       &.primary {
         background-color: $primary-color;
         color: white;
+
+        &::before {
+          content: "+ Create";
+        }
       }
 
       &.secondary {
         background-color: $secondary-color;
         color: white;
+
+        &::before {
+          content: "💸 Support";
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    nav {
+      gap: 0.5rem;
+
+      a {
+        &.primary {
+          &::before {
+            content: "+";
+          }
+        }
+        &.secondary {
+          &::before {
+            content: "💸";
+          }
+        }
       }
     }
   }
