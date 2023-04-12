@@ -38,8 +38,8 @@ const Home = () => {
     getNextPageParam: (prevData: any) => prevData.nextPage,
     queryFn: ({ pageParam = 1 }) => fetchPosts(pageParam),
   });
-  const location = useLocation();
 
+  const location = useLocation();
   useEffect(() => {
     if (location.pathname !== "/") {
       const fetchSinglePost = async () => {
@@ -60,12 +60,10 @@ const Home = () => {
 
 
   useEffect(() => {
-    console.log(hasNextPage);
-
     let fetching = false;
     const onScroll = (e: any) => {
       const { scrollTop, clientHeight, scrollHeight } = e.target
-        .scrollingElement as Element;
+        .scrollingElement as HTMLElement;
       if (!fetching && scrollTop + clientHeight >= scrollHeight * 0.9) {
         fetching = true;
         hasNextPage && fetchNextPage();
@@ -96,7 +94,7 @@ const Home = () => {
 
   return (
     data && (
-      <>
+      <div>
         <div className="home-grid">
           {data.pages.map((page: any) => {
             return page.data.map((post: PostProps, idx: number) => (
@@ -105,7 +103,7 @@ const Home = () => {
                 image={post.image}
                 name={post.name}
                 prompt={post.prompt}
-                key={idx}
+                key={post._id}
                 id={post._id}
                 type={
                   idx % 3 === 0
@@ -135,7 +133,7 @@ const Home = () => {
             <p>- {singlePost.name}</p>
           </div>
         </Modal>
-      </>
+      </div>
     )
   );
 };
